@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 
 export function createBookingNo() {
   const random = Math.floor(Math.random() * 9000 + 1000);

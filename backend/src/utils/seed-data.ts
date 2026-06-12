@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcryptjs';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 import { DataSource } from 'typeorm';
 import { BookingStatus } from '../common/enums/booking-status.enum';
 import { UserRole } from '../common/enums/user-role.enum';
@@ -104,12 +104,12 @@ export async function seedDemoData(dataSource: DataSource) {
   );
 
   const bookingRepo = dataSource.getRepository(Booking);
-  const booking = await bookingRepo.save(
+  const completedBooking = await bookingRepo.save(
     bookingRepo.create({
       bookingNo: createBookingNo(),
       courseId: course.id,
       studentId: student.id,
-      bookingDate: dayjs().add(1, 'day').format('YYYY-MM-DD'),
+      bookingDate: dayjs().subtract(2, 'day').format('YYYY-MM-DD'),
       timeSlot: '14:00-16:00',
       peopleCount: 2,
       status: BookingStatus.COMPLETED,
@@ -117,9 +117,33 @@ export async function seedDemoData(dataSource: DataSource) {
     }),
   );
 
+  await bookingRepo.save(
+    bookingRepo.create({
+      bookingNo: createBookingNo(),
+      courseId: course.id,
+      studentId: student.id,
+      bookingDate: dayjs().add(1, 'day').format('YYYY-MM-DD'),
+      timeSlot: '10:00-12:00',
+      peopleCount: 3,
+      status: BookingStatus.CONFIRMED,
+    }),
+  );
+
+  await bookingRepo.save(
+    bookingRepo.create({
+      bookingNo: createBookingNo(),
+      courseId: course.id,
+      studentId: student.id,
+      bookingDate: dayjs().add(1, 'day').format('YYYY-MM-DD'),
+      timeSlot: '14:00-16:00',
+      peopleCount: 1,
+      status: BookingStatus.PENDING,
+    }),
+  );
+
   await dataSource.getRepository(Review).save(
     dataSource.getRepository(Review).create({
-      bookingId: booking.id,
+      bookingId: completedBooking.id,
       studentId: student.id,
       courseId: course.id,
       rating: 5,
