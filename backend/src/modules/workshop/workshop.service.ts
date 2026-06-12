@@ -24,7 +24,7 @@ export class WorkshopService {
       qb.andWhere('workshop.rating >= :minRating', { minRating: Number(query.minRating) });
     }
     if (query.district) {
-      qb.andWhere('workshop.name LIKE :district', { district: `%${query.district}%` });
+      qb.andWhere('workshop.address LIKE :district', { district: `%${query.district}%` });
     }
 
     return qb.getMany();

@@ -33,6 +33,7 @@ export const useBookingStore = defineStore('booking', {
     async checkIn(id: number) {
       const booking = await checkInBookingApi(id);
       this.list = this.list.map((item) => (item.id === id ? booking : item));
+      this.instructorList = this.instructorList.map((item) => (item.id === id ? booking : item));
     },
   },
 });
